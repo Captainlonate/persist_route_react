@@ -1,0 +1,26 @@
+.nestedlinks {
+  display: flex;
+  justify-content: center;
+}
+
+.nestedlinks--links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.nestedlinks--link {
+  box-sizing: border-box;
+  flex: 0 1 50%;
+  background-color: green;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid grey;
+}
