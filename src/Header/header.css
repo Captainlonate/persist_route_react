@@ -1,0 +1,37 @@
+#header--root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgb(54, 57, 60);
+  color: white;
+}
+
+#header--root--nav {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#header--root .navlink {
+  text-decoration: inherit;
+}
+
+#header--root .navlink.active__yes {
+  font-size: 1.4em;
+  color: yellow;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
+#header--root .navlink.active__no {
+  font-size: 1.2em;
+  color: white;
+}
+
+#header--root .navlink.active__no:hover {
+  text-decoration: underline;
+}
