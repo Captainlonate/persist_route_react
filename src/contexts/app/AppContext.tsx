@@ -1,20 +1,25 @@
 import type { Dispatch, ReactNode } from "react";
 import { createContext, useContext, useReducer } from "react";
 import { appContextReducer, AppContextDispatchActions } from "./AppReducer";
+import { IUserInfo } from "../../data/getUser";
 
 /**
  * The type of the "state" stored within
  * the AppContext
  */
 export interface IAppContextState {
-  businessId: number;
+  appInitState: "default" | "pending" | "success" | "error";
+  activeBusinessId: number;
+  user: IUserInfo | null;
 }
 
 /**
  * The initial state of the AppContext
  */
 const initialContextState: IAppContextState = {
-  businessId: 0,
+  appInitState: "default",
+  activeBusinessId: 0,
+  user: null,
 };
 
 /**

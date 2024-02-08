@@ -13,7 +13,7 @@ export function NestedLinksInPage() {
       <div className="nestedlinks--links">
         {
           links.map((path) => (
-            <Link className="nestedlinks--link" to={path}>&lt;Link to="{path}" /&gt;</Link>
+            <Link key={path} className="nestedlinks--link" to={path}>&lt;Link to="{path}" /&gt;</Link>
           ))
         }
       </div>
