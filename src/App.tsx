@@ -5,61 +5,72 @@ import {
   Route,
   Routes,
   useParams,
-  useLocation,
-  useMatch
-} from "react-router-dom";
-import { Header } from "./Header/Header";
+} from "./lib/react-router-dom";
+import { Header } from "./components/Header/Header";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Trips } from "./pages/Trips/Trips";
 import { Billing } from "./pages/Billing/Billing";
-import { Debugging } from "./Debugging/Debugging";
+import { Debugging } from "./components/Debugging/Debugging";
 import "./App.css";
 import { AppContextProvider, useAppContext } from "./contexts/app/AppContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getUser } from "./data/getUser";
-import { CompanyChooserModal } from "./CompanyChooserModal";
+import { CompanyChooserModal } from "./components/CompanyChooserModal";
 
 /**
- * Still need to prove:
- *  Nested Routes (/billing, /billing/accounts, /billing/invoices)
- *  Overriding Link and useNavigate
+ * Convenient place to store config for this PoC demo.
  */
+const DEMO_CONFIG = {
+  /**
+   * Which user role we are prentending to be logged in as
+   */
+  fakeUserRole: "superadmin",
+} as const;
 
+/**
+ * parseCompanyId(undefined) => NaN
+ * parseCompanyId(null) => NaN
+ * parseCompanyId('abc') => NaN
+ * parseCompanyId({}) => NaN
+ * parseCompanyId("123") => 123
+ * parseCompanyId(123) => 123
+ */
 function parseCompanyId(maybeCompanyId: any) {
   const companyIdNum = parseInt(maybeCompanyId);
   if (!Number.isNaN(companyIdNum) && companyIdNum > 0) {
-    return companyIdNum
+    return companyIdNum;
   }
 
   return NaN;
 }
 
-function PageLayout() {
-  const { state: { user } } = useAppContext();
-  
-  const rrParams = useParams();
-  const companyIdNumOrNaN = parseCompanyId(rrParams?.companyId);
-  const hasValidCompanyId = !Number.isNaN(companyIdNumOrNaN);
+function PageLayoutAndRoleChecker() {
+  const appContext = useAppContext();
+  const userRole = appContext.state.user?.role;
 
-  console.log("PageLayout", { companyId: rrParams?.companyId, user, companyIdNumOrNaN, hasValidCompanyId })
+  const rrParams = useParams();
+  const companyIdInUrl = parseCompanyId(rrParams?.companyId);
+  const validCompanyInUrl = !Number.isNaN(companyIdInUrl);
 
   switch (true) {
-    case hasValidCompanyId && user?.role === "superadmin":
+    case validCompanyInUrl && userRole === "superadmin": {
       // They are allowed to access /company/:companyId. Everything is fine. Pass through.
       break;
-    case !hasValidCompanyId && user?.role === "superadmin":
+    }
+    case !validCompanyInUrl && userRole === "superadmin": {
       // Need to show them a picker.
-      return (<CompanyChooserModal />)
-      break;
-    case hasValidCompanyId && user?.role === "user":
+      return <CompanyChooserModal />;
+    }
+    case validCompanyInUrl && userRole === "user": {
       // They're trying to go to companyId, but they cannot. So remove it and redirect.
       // Just send them to the base site. (remove companyId)
-      const urlWithoutCompanyPrefix = rrParams["*"] ? rrParams["*"] : "/"
-      return <Navigate to={urlWithoutCompanyPrefix} />
-      break;
-    case !hasValidCompanyId && user?.role === "user":
+      const urlWithoutCompanyPrefix = rrParams["*"] ? rrParams["*"] : "/";
+      return <Navigate to={urlWithoutCompanyPrefix} />;
+    }
+    case !validCompanyInUrl && userRole === "user": {
       // Just send them to the base site. Everything is fine. Pass through.
       break;
+    }
   }
 
   return (
@@ -86,7 +97,7 @@ function ActualRoutes() {
 function AppRoutes() {
   return (
     <Routes>
-      <Route element={<PageLayout />}>
+      <Route element={<PageLayoutAndRoleChecker />}>
         <Route path="/company/:companyId/*" element={<ActualRoutes />} />
         <Route path="*" element={<ActualRoutes />} />
       </Route>
@@ -94,93 +105,28 @@ function AppRoutes() {
   );
 }
 
-function AppWithAllProviders() {
-  return (
-    <div className="app">
-      <AppRoutes />
-    </div>
-  );
-}
-
 /**
- * 1)
- * User arrive at the site with a url. Either:
- *  - /company/:companyId/
- *  - /company/:companyId/billing
- *  - /
- *  - /billing
- *
- * 2)
- * Show loading spinner and start running logic in <AppInit />.
- *
- * 3)
- * Try to log in the user or check if already logged in. Get token.
- * Parse token and find list of business Ids and/or user role.
- * At this point, I'm still showing the loading spinner.
- * Now I know which URL they were trying to load, and which companyIds they have access to.
- *
- * 4)
- * If role===superadmin
- *   Must go to company/:companyId
- *     If already going to companyId, verify it's in their list
- *      If in their list, send them on their way
- *      If not in their list
- *        Trigger the company chooser modal
- *     If not already going to companyId, trigger the company chooser modal
- *
- * If role===user
- *
- * If user role is "superadmin",
- */
-
-// Just pseudo code
-// function determineWhatToDo(
-//   intendedURL: string,
-//   role: "user" | "superadmin",
-//   companyIds: string[],
-// ): string {
-//   if (role === "superadmin") {
-//     //
-//   } else {
-//     //
-//   }
-// }
-
-/**
- *
+ * Pretend to log in the user. THen set that user object in
+ * global Context. Don't render children until we have a user.
+ * Meaning, don't render any routes until logged in.
  */
 function AppInit({ children }: { children: React.ReactNode }) {
-  // Cannot `useParams()` here. Has to be used within a route.
-  // const RRParams = useParams();
-  // But I can `useLocation` and string.split
-  // const RRLocation = useLocation();
-  // I can also try to match like this
-  const match = useMatch('/company/:companyId/*');
   const {
-    state: { activeBusinessId, user, appInitState },
+    state: { user, appInitState },
     dispatch,
   } = useAppContext();
 
-  
-  // if (match && match?.params?.companyId) {
-  //   const intendedCompanyId = match?.params?.companyId;
-  //   console.log("AppInit", { intendedCompanyId, match, user, appInitState });
-  // }
-
   useEffect(() => {
-    if (activeBusinessId || appInitState !== "default") {
+    if (user || appInitState !== "default") {
       return;
     }
     dispatch({ type: "SET_APP_INIT", payload: "pending" });
-    // Log in the user, get back token, check role and business ids
-    getUser("superadmin").then((user) => {
+    // "Log In" the user, then store in app context
+    getUser(DEMO_CONFIG.fakeUserRole).then((user) => {
       dispatch({ type: "SET_USER", payload: { ...user } });
-      dispatch({ type: "SET_BUSINESS_ID", payload: user.companyIds[0] });
       dispatch({ type: "SET_APP_INIT", payload: "success" });
-
-      // What to do about the URL?
     });
-  }, [appInitState, dispatch, activeBusinessId]);
+  }, [appInitState, dispatch, user]);
 
   switch (appInitState) {
     case "default":
@@ -188,22 +134,21 @@ function AppInit({ children }: { children: React.ReactNode }) {
     case "pending":
       return <div>Loading...</div>;
     case "success":
-      return activeBusinessId ? <>{children}</> : null;
+      return user ? <>{children}</> : null;
     case "error":
       return <div>Error! No Business ID Found.</div>;
     default:
       return null;
   }
-
-  return null;
 }
 
 function Providers() {
   return (
+    // Using BrowserRouter, even though members has custom router
     <BrowserRouter>
       <AppContextProvider>
         <AppInit>
-          <AppWithAllProviders />
+          <AppRoutes />
         </AppInit>
       </AppContextProvider>
     </BrowserRouter>

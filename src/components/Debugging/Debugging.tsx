@@ -1,6 +1,10 @@
-import { useLocation, useSearchParams, useParams } from 'react-router-dom';
-import './debugging.css'
-import { useAppContext } from '../contexts/app/AppContext';
+import {
+  useLocation,
+  useSearchParams,
+  useParams,
+} from "../../lib/react-router-dom";
+import "./debugging.css";
+import { useAppContext } from "../../contexts/app/AppContext";
 
 export function Debugging() {
   const rrLocation = useLocation();
@@ -26,5 +30,5 @@ export function Debugging() {
         RR useParams(): {JSON.stringify(rrParams, null, 2)}
       </pre>
     </div>
-  )
+  );
 }
