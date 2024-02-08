@@ -1,4 +1,4 @@
-import { NestedLinksInPage } from "../../NestedLinksInPage/NestedLinksInPage";
+import { NestedLinksInPage } from "../../components/NestedLinksInPage/NestedLinksInPage";
 
 export function Trips() {
   return (
@@ -6,5 +6,5 @@ export function Trips() {
       <h1>Trips</h1>
       <NestedLinksInPage />
     </div>
-  )
+  );
 }

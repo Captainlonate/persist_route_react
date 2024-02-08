@@ -7,14 +7,14 @@ export interface IUserInfo {
 const REGULAR_USER: IUserInfo = {
   name: "Regular User",
   role: "user",
-  companyIds: [1, 2, 3]
-}
+  companyIds: [1001],
+};
 
 const ADMIN_USER: IUserInfo = {
   name: "Super Admin User",
   role: "superadmin",
-  companyIds: [1]
-}
+  companyIds: [1111, 2222, 3333, 4444],
+};
 
 /**
  * This function lets me pretend that I'm fetching a user
@@ -23,7 +23,7 @@ const ADMIN_USER: IUserInfo = {
 export function getUser(role: "user" | "superadmin"): Promise<IUserInfo> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(role === "user" ? REGULAR_USER : ADMIN_USER)
-    }, 50)
-  })
+      resolve(role === "user" ? REGULAR_USER : ADMIN_USER);
+    }, 50);
+  });
 }

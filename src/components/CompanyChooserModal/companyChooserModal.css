@@ -1,0 +1,20 @@
+.companychooser--links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.companychooser--link {
+  border-radius: 5px;
+  border: 1px solid grey;
+  padding: 1em;
+  width: 25em;
+  margin-bottom: 1em;
+  color: rgb(148, 198, 255);
+}
+
+.companychooser--link:hover {
+  color: rgb(1, 255, 1);
+  border: 1px solid rgb(1, 255, 1);
+  font-weight: bold;
+}

@@ -1,4 +1,4 @@
-import { NestedLinksInPage } from "../../NestedLinksInPage/NestedLinksInPage";
+import { NestedLinksInPage } from "../../components/NestedLinksInPage/NestedLinksInPage";
 
 export function Dashboard() {
   return (
@@ -6,5 +6,5 @@ export function Dashboard() {
       <h1>Dashboard</h1>
       <NestedLinksInPage />
     </div>
-  )
+  );
 }
