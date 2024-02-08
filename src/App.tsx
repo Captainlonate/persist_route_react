@@ -5,6 +5,8 @@ import {
   Route,
   Routes,
   useParams,
+  useLocation,
+  useMatch
 } from "react-router-dom";
 import { Header } from "./Header/Header";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
@@ -15,6 +17,7 @@ import "./App.css";
 import { AppContextProvider, useAppContext } from "./contexts/app/AppContext";
 import { useEffect, useState } from "react";
 import { getUser } from "./data/getUser";
+import { CompanyChooserModal } from "./CompanyChooserModal";
 
 /**
  * Still need to prove:
@@ -22,7 +25,43 @@ import { getUser } from "./data/getUser";
  *  Overriding Link and useNavigate
  */
 
+function parseCompanyId(maybeCompanyId: any) {
+  const companyIdNum = parseInt(maybeCompanyId);
+  if (!Number.isNaN(companyIdNum) && companyIdNum > 0) {
+    return companyIdNum
+  }
+
+  return NaN;
+}
+
 function PageLayout() {
+  const { state: { user } } = useAppContext();
+  
+  const rrParams = useParams();
+  const companyIdNumOrNaN = parseCompanyId(rrParams?.companyId);
+  const hasValidCompanyId = !Number.isNaN(companyIdNumOrNaN);
+
+  console.log("PageLayout", { companyId: rrParams?.companyId, user, companyIdNumOrNaN, hasValidCompanyId })
+
+  switch (true) {
+    case hasValidCompanyId && user?.role === "superadmin":
+      // They are allowed to access /company/:companyId. Everything is fine. Pass through.
+      break;
+    case !hasValidCompanyId && user?.role === "superadmin":
+      // Need to show them a picker.
+      return (<CompanyChooserModal />)
+      break;
+    case hasValidCompanyId && user?.role === "user":
+      // They're trying to go to companyId, but they cannot. So remove it and redirect.
+      // Just send them to the base site. (remove companyId)
+      const urlWithoutCompanyPrefix = rrParams["*"] ? rrParams["*"] : "/"
+      return <Navigate to={urlWithoutCompanyPrefix} />
+      break;
+    case !hasValidCompanyId && user?.role === "user":
+      // Just send them to the base site. Everything is fine. Pass through.
+      break;
+  }
+
   return (
     <>
       <Header />
@@ -111,13 +150,22 @@ function AppWithAllProviders() {
  *
  */
 function AppInit({ children }: { children: React.ReactNode }) {
-  const { companyId } = useParams();
+  // Cannot `useParams()` here. Has to be used within a route.
+  // const RRParams = useParams();
+  // But I can `useLocation` and string.split
+  // const RRLocation = useLocation();
+  // I can also try to match like this
+  const match = useMatch('/company/:companyId/*');
   const {
     state: { activeBusinessId, user, appInitState },
     dispatch,
   } = useAppContext();
 
-  console.log("AppInit", { companyId, user, appInitState });
+  
+  // if (match && match?.params?.companyId) {
+  //   const intendedCompanyId = match?.params?.companyId;
+  //   console.log("AppInit", { intendedCompanyId, match, user, appInitState });
+  // }
 
   useEffect(() => {
     if (activeBusinessId || appInitState !== "default") {
@@ -129,6 +177,8 @@ function AppInit({ children }: { children: React.ReactNode }) {
       dispatch({ type: "SET_USER", payload: { ...user } });
       dispatch({ type: "SET_BUSINESS_ID", payload: user.companyIds[0] });
       dispatch({ type: "SET_APP_INIT", payload: "success" });
+
+      // What to do about the URL?
     });
   }, [appInitState, dispatch, activeBusinessId]);
 
