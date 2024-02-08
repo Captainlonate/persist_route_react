@@ -44,12 +44,16 @@ function parseCompanyId(maybeCompanyId: any) {
   return NaN;
 }
 
+/**
+ * This should run on all route changes. The only way a route actually renders
+ * is if this renders <Outlet />.
+ */
 function PageLayoutAndRoleChecker() {
   const appContext = useAppContext();
   const userRole = appContext.state.user?.role;
 
-  const rrParams = useParams();
-  const companyIdInUrl = parseCompanyId(rrParams?.companyId);
+  const routeParams = useParams();
+  const companyIdInUrl = parseCompanyId(routeParams?.companyId);
   const validCompanyInUrl = !Number.isNaN(companyIdInUrl);
 
   switch (true) {
@@ -64,7 +68,7 @@ function PageLayoutAndRoleChecker() {
     case validCompanyInUrl && userRole === "user": {
       // They're trying to go to companyId, but they cannot. So remove it and redirect.
       // Just send them to the base site. (remove companyId)
-      const urlWithoutCompanyPrefix = rrParams["*"] ? rrParams["*"] : "/";
+      const urlWithoutCompanyPrefix = routeParams["*"] ? routeParams["*"] : "/";
       return <Navigate to={urlWithoutCompanyPrefix} />;
     }
     case !validCompanyInUrl && userRole === "user": {
@@ -77,6 +81,7 @@ function PageLayoutAndRoleChecker() {
     <>
       <Header />
       <Debugging />
+      {/* Render the actual <Route /> components at this <Outlet /> */}
       <Outlet />
     </>
   );
@@ -144,7 +149,7 @@ function AppInit({ children }: { children: React.ReactNode }) {
 
 function Providers() {
   return (
-    // Using BrowserRouter, even though members has custom router
+    // Using BrowserRouter here, even though members has a custom router
     <BrowserRouter>
       <AppContextProvider>
         <AppInit>
