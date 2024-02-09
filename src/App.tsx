@@ -6,6 +6,10 @@ import {
   Routes,
   useParams,
 } from "./lib/react-router-dom";
+import {
+  CustomRouter,
+  historySingleton,
+} from "./components/CustomRouter/CustomRouter";
 import { Header } from "./components/Header/Header";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Trips } from "./pages/Trips/Trips";
@@ -68,7 +72,9 @@ function PageLayoutAndRoleChecker() {
     case validCompanyInUrl && userRole === "user": {
       // They're trying to go to companyId, but they cannot. So remove it and redirect.
       // Just send them to the base site. (remove companyId)
-      const urlWithoutCompanyPrefix = routeParams["*"] ? routeParams["*"] : "/";
+      const urlWithoutCompanyPrefix = routeParams["*"]
+        ? `/${routeParams["*"]}`
+        : "/";
       return <Navigate to={urlWithoutCompanyPrefix} />;
     }
     case !validCompanyInUrl && userRole === "user": {
@@ -99,6 +105,17 @@ function ActualRoutes() {
   );
 }
 
+/**
+ * When the user arrives at the site, and they sign in, we know:
+ * 1. Where they are trying to go (/company/:companyId, /trips, /)
+ * 2. Their role (superadmin, user)
+ * 3. List of companyIds they are allowed to access (from the token)
+ *
+ * Assumptions:
+ * 1. If superadmin shares /company/:companyId/trips with a user, we remove
+ *    the prefix and send them to /trips.
+ * 2. I handle the logic (even the initial logic) in a "<AuthRoute />" at the route level.
+ */
 function AppRoutes() {
   return (
     <Routes>
@@ -150,13 +167,13 @@ function AppInit({ children }: { children: React.ReactNode }) {
 function Providers() {
   return (
     // Using BrowserRouter here, even though members has a custom router
-    <BrowserRouter>
+    <CustomRouter history={historySingleton}>
       <AppContextProvider>
         <AppInit>
           <AppRoutes />
         </AppInit>
       </AppContextProvider>
-    </BrowserRouter>
+    </CustomRouter>
   );
 }
 
