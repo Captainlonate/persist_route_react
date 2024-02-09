@@ -1,7 +1,7 @@
 import { useNavigate } from "../../lib/react-router-dom";
 import { NestedLinksInPage } from "../../components/NestedLinksInPage/NestedLinksInPage";
 
-export function Billing() {
+export function BillingIndex() {
   const navigate = useNavigate();
 
   function onClick() {
@@ -10,7 +10,7 @@ export function Billing() {
 
   return (
     <div>
-      <h1>Billing</h1>
+      <h1>Billing Index</h1>
       <hr />
       <button onClick={onClick}>
         Click to programmatically navigate to "/trips"

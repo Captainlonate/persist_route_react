@@ -21,15 +21,21 @@ export function Header() {
     <header id="header--root">
       <h1>Header</h1>
       <nav id="header--root--nav">
-        <NavLink to="/" className={setClassNameIfActive}>
+        <NavLink to="/" end className={setClassNameIfActive}>
           Dashboard <em>(NavLink)</em>
         </NavLink>
-        <NavLink to="/trips" className={setClassNameIfActive}>
+        <NavLink to="/trips" end className={setClassNameIfActive}>
           Trips <em>(NavLink)</em>
         </NavLink>
-        <NavLink to="/billing" className={setClassNameIfActive}>
-          Billing <em>(NavLink)</em>
-        </NavLink>
+        <div>
+          <NavLink to="/billing" end className={setClassNameIfActive}>
+            Billing <em>(NavLink)</em>
+          </NavLink>
+          <br />
+          <NavLink to="/billing/summary" end className={setClassNameIfActive}>
+            Billing/Summary <em>(NavLink)</em>
+          </NavLink>
+        </div>
       </nav>
     </header>
   );

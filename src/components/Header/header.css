@@ -17,18 +17,17 @@
 }
 
 #header--root .navlink {
+  font-size: 1.0em;
   text-decoration: inherit;
 }
 
 #header--root .navlink.active__yes {
-  font-size: 1.4em;
   color: yellow;
   font-weight: bold;
   cursor: not-allowed;
 }
 
 #header--root .navlink.active__no {
-  font-size: 1.2em;
   color: white;
 }
 

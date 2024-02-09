@@ -13,7 +13,7 @@ import {
 import { Header } from "./components/Header/Header";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Trips } from "./pages/Trips/Trips";
-import { Billing } from "./pages/Billing/Billing";
+import { BillingRoutes } from "./pages/Billing/BillingRoutes";
 import { Debugging } from "./components/Debugging/Debugging";
 import "./App.css";
 import { AppContextProvider, useAppContext } from "./contexts/app/AppContext";
@@ -98,9 +98,10 @@ function ActualRoutes() {
     <Routes>
       <Route index element={<Dashboard />} />
       <Route path="trips" element={<Trips />} />
-      <Route path="billing" element={<Billing />} />
+      <Route path="billing/*" element={<BillingRoutes />} />
 
-      <Route path="*" element={<Navigate to="." />} />
+      <Route path="*" element={<Navigate to="." replace />} />
+      {/* <Route path="404" element={<Navigate to="." replace />} /> */}
     </Routes>
   );
 }

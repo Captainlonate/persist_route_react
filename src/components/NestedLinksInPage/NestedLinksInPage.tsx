@@ -1,7 +1,7 @@
 import { Link } from "../../lib/react-router-dom";
 import "./nestedLinksInPage.css";
 
-const links = ["/", "/trips", "/billing"] as const;
+const links = ["/", "/trips", "/billing", "/billing/summary"] as const;
 
 export function NestedLinksInPage() {
   return (
