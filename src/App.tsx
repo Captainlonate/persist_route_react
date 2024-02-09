@@ -6,10 +6,10 @@ import {
   Routes,
   useParams,
 } from "./lib/react-router-dom";
-import {
-  CustomRouter,
-  historySingleton,
-} from "./components/CustomRouter/CustomRouter";
+// import {
+//   CustomRouter,
+//   historySingleton,
+// } from "./components/CustomRouter/CustomRouter";
 import { Header } from "./components/Header/Header";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 import { Trips } from "./pages/Trips/Trips";
@@ -167,13 +167,15 @@ function AppInit({ children }: { children: React.ReactNode }) {
 function Providers() {
   return (
     // Using BrowserRouter here, even though members has a custom router
-    <CustomRouter history={historySingleton}>
+    // <CustomRouter history={historySingleton}>
+    <BrowserRouter>
       <AppContextProvider>
         <AppInit>
           <AppRoutes />
         </AppInit>
       </AppContextProvider>
-    </CustomRouter>
+    {/* </CustomRouter> */}
+    </BrowserRouter>
   );
 }
 

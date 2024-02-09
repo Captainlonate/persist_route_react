@@ -23,21 +23,17 @@ export function CustomRouter({
   React.useLayoutEffect(
     () =>
       history.listen((newState) => {
-        console.log({
-          "window.location": window.location,
-          newState: newState.location,
-        });
         if (
-          window.location.pathname.startsWith("/company/") &&
+          state.location.pathname.startsWith("/company/") &&
           !newState.location.pathname.startsWith("/company/")
         ) {
-          console.log(
-            "You are on a company route, and about to leave the company route.",
-          );
+          // If on a company page, but navigating away from it
+          historySingleton.replace(`/company/${state.location.pathname.split("/")[2]}${newState.location.pathname}`);
+        } else {
+          setState(newState);
         }
-        setState(newState);
       }),
-    [history],
+    [history, state],
   );
 
   return (
