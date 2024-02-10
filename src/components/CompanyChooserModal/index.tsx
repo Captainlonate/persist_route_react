@@ -1,4 +1,4 @@
-import { Link } from "../../lib/react-router-dom";
+import { OrgLink } from "../../lib/react-router-dom";
 import { useAppContext } from "../../contexts/app/AppContext";
 import "./companyChooserModal.css";
 
@@ -14,13 +14,13 @@ export function CompanyChooserModal() {
       <h1>Choose your company</h1>
       <div className="companychooser--links">
         {companyIds.map((companyId) => (
-          <Link
+          <OrgLink
             className="companychooser--link"
             key={companyId}
             to={`/company/${companyId}/`}
           >
-            &lt;Link to="{`/company/${companyId}/`}" /&gt;
-          </Link>
+            &lt;OrgLink to="{`/company/${companyId}/`}" /&gt;
+          </OrgLink>
         ))}
       </div>
     </div>

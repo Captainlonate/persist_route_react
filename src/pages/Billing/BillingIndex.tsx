@@ -1,8 +1,8 @@
-import { useNavigate } from "../../lib/react-router-dom";
+import { useNavigateOrg } from "../../lib/react-router-dom";
 import { NestedLinksInPage } from "../../components/NestedLinksInPage/NestedLinksInPage";
 
 export function BillingIndex() {
-  const navigate = useNavigate();
+  const navigate = useNavigateOrg();
 
   function onClick() {
     navigate("/trips");

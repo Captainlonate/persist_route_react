@@ -1,9 +1,10 @@
 export * from "./componentOverrides";
 export * from "./hookOverrides";
+export { NavigateToRoot } from "./NavigateToRoot";
 export {
   BrowserRouter,
-  // Link,
-  // NavLink,
+  Link,
+  NavLink,
   Navigate,
   Outlet,
   Route,

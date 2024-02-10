@@ -20,16 +20,16 @@ function updateTo(to: RR.To): RR.To {
   return to;
 }
 
-export const Link: typeof RR.Link = forwardRef((props, ref) => {
+export const OrgLink: typeof RR.Link = forwardRef((props, ref) => {
   // If there is a companyId in the url, then we want to retain it
   return <RR.Link ref={ref} {...props} to={updateTo(props.to)} />;
 });
 
-export const NavLink: typeof RR.NavLink = forwardRef((props, ref) => {
+export const OrgNavLink: typeof RR.NavLink = forwardRef((props, ref) => {
   // If there is a companyId in the url, then we want to retain it
   return <RR.NavLink ref={ref} {...props} to={updateTo(props.to)} />;
 });
 
-export const Navigate: typeof RR.Navigate = (props) => {
+export const OrgNavigate: typeof RR.Navigate = (props) => {
   return RR.Navigate(props);
 };

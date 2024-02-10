@@ -1,4 +1,4 @@
-import { Link } from "../../lib/react-router-dom";
+import { OrgLink } from "../../lib/react-router-dom";
 import "./nestedLinksInPage.css";
 
 const links = ["/", "/trips", "/billing", "/billing/summary"] as const;
@@ -8,9 +8,9 @@ export function NestedLinksInPage() {
     <div className="nestedlinks">
       <div className="nestedlinks--links">
         {links.map((path) => (
-          <Link key={path} className="nestedlinks--link" to={path}>
-            &lt;Link to="{path}" /&gt;
-          </Link>
+          <OrgLink key={path} className="nestedlinks--link" to={path}>
+            &lt;OrgLink to="{path}" /&gt;
+          </OrgLink>
         ))}
       </div>
     </div>

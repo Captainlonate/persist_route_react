@@ -7,7 +7,7 @@ export function buildCompanyPath(companyId: string, path: string | undefined | n
   return `/company/${companyId}/${removeLeadingSlash(path)}`;
 }
 
-const companyIdRegex = RegExp(/^\/company\/(?<companyId>\d+)\//i);
+const companyIdRegex = RegExp(/^\/company\/(?<companyId>\d+)/i);
 
 export function isCompanyPath(path: string | undefined | null) {
   return path && companyIdRegex.test(path);
@@ -16,4 +16,18 @@ export function isCompanyPath(path: string | undefined | null) {
 export function getCompanyPathFromUrl() {
   const matches = window.location.pathname.match(companyIdRegex);
   return matches?.groups?.companyId ?? null;
+}
+
+/**
+ * If `/company/:companyId/` is in the URL already, that will be the root path.
+ * Otherwise `/` is the root path.
+ */
+export function getRootPath() {
+  const companyIdFromUrl = getCompanyPathFromUrl();
+  
+  if (companyIdFromUrl) {
+    return `/company/${companyIdFromUrl}/`;
+  }
+
+  return "/";
 }

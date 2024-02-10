@@ -1,6 +1,7 @@
 import {
   BrowserRouter,
   Navigate,
+  NavigateToRoot,
   Outlet,
   Route,
   Routes,
@@ -28,7 +29,7 @@ const DEMO_CONFIG = {
   /**
    * Which user role we are prentending to be logged in as
    */
-  fakeUserRole: "superadmin",
+  fakeUserRole: "user",
 } as const;
 
 /**
@@ -100,7 +101,7 @@ function ActualRoutes() {
       <Route path="trips" element={<Trips />} />
       <Route path="billing/*" element={<BillingRoutes />} />
 
-      <Route path="*" element={<Navigate to="." replace />} />
+      <Route path="*" element={<NavigateToRoot />} />
       {/* <Route path="404" element={<Navigate to="." replace />} /> */}
     </Routes>
   );

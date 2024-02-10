@@ -1,4 +1,4 @@
-import { Route, Routes } from "../../lib/react-router-dom";
+import { NavigateToRoot, Route, Routes } from "../../lib/react-router-dom";
 import { BillingIndex } from "./BillingIndex";
 import { BillingSummary } from "./BillingSummary";
 
@@ -7,7 +7,8 @@ export function BillingRoutes() {
     <Routes>
       <Route index element={<BillingIndex />} />
       <Route path="summary" element={<BillingSummary />} />
-      {/* <Route path="*" element={<Navigate to="/404" replace />} /> */}
+
+      <Route path="*" element={<NavigateToRoot />} />
     </Routes>
   );
 }

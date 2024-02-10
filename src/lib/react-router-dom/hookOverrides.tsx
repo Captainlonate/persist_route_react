@@ -5,7 +5,7 @@ type UseNavigateArgs =
   | [delta: number]
   | [to: RR.To, options?: RR.NavigateOptions];
 
-export const useNavigate: typeof RR.useNavigate = () => {
+export const useNavigateOrg: typeof RR.useNavigate = () => {
   const rrNavigate = RR.useNavigate();
 
   function overriddenNavigate(...args: UseNavigateArgs) {

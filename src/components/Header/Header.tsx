@@ -1,4 +1,4 @@
-import { NavLink } from "../../lib/react-router-dom";
+import { OrgNavLink } from "../../lib/react-router-dom";
 import "./header.css";
 
 // I just pulled this out of react-router-dom. It wasn't exported.
@@ -21,20 +21,20 @@ export function Header() {
     <header id="header--root">
       <h1>Header</h1>
       <nav id="header--root--nav">
-        <NavLink to="/" end className={setClassNameIfActive}>
-          Dashboard <em>(NavLink)</em>
-        </NavLink>
-        <NavLink to="/trips" end className={setClassNameIfActive}>
-          Trips <em>(NavLink)</em>
-        </NavLink>
+        <OrgNavLink to="/" end className={setClassNameIfActive}>
+          Dashboard <em>(OrgNavLink)</em>
+        </OrgNavLink>
+        <OrgNavLink to="/trips" end className={setClassNameIfActive}>
+          Trips <em>(OrgNavLink)</em>
+        </OrgNavLink>
         <div>
-          <NavLink to="/billing" end className={setClassNameIfActive}>
-            Billing <em>(NavLink)</em>
-          </NavLink>
+          <OrgNavLink to="/billing" end className={setClassNameIfActive}>
+            Billing <em>(OrgNavLink)</em>
+          </OrgNavLink>
           <br />
-          <NavLink to="/billing/summary" end className={setClassNameIfActive}>
-            Billing/Summary <em>(NavLink)</em>
-          </NavLink>
+          <OrgNavLink to="/billing/summary" end className={setClassNameIfActive}>
+            Billing/Summary <em>(OrgNavLink)</em>
+          </OrgNavLink>
         </div>
       </nav>
     </header>
