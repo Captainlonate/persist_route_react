@@ -29,7 +29,7 @@ const DEMO_CONFIG = {
   /**
    * Which user role we are prentending to be logged in as
    */
-  fakeUserRole: "user",
+  fakeUserRole: "superadmin",
 } as const;
 
 /**
@@ -176,7 +176,7 @@ function Providers() {
           <AppRoutes />
         </AppInit>
       </AppContextProvider>
-    {/* </CustomRouter> */}
+      {/* </CustomRouter> */}
     </BrowserRouter>
   );
 }
